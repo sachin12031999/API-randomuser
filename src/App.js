@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React , {useEffect , useState} from 'react';
+import { Container  , Col , Row} from 'reactstrap';
 import './App.css';
+import Axios from "axios"
+import Cards from './Card';
 
 function App() {
+const [details , setDetails]=useState({})
+const fetchDetails = async()=>{
+  const {data} = await Axios.get("https://randomuser.me/api/")
+  console.log("RESPONSE:", data);
+
+  const details = data?.results[0]
+  // console.log(details)
+  setDetails(details)
+}
+useEffect(()=>{
+  fetchDetails()
+} , [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <Container fluid className=' p-4 bg-primery App'>
+    <Row>
+      <Col md={4} className="offset-md-4 mt-4">
+        <Cards details={details}/>
+      </Col>
+    </Row>
+   </Container>
   );
 }
-
 export default App;
